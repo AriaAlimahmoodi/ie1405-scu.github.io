@@ -1,0 +1,15 @@
+name: ثبت‌نام در درس
+description: ساختن مخزن خصوصی تحویل تمرین‌ها
+title: "ثبت‌نام"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        شمارهٔ دانشجویی خودتان را بنویسید و Create را بزنید. یکی دو دقیقه بعد، پاسخ همین‌جا می‌آید و دعوت مخزنتان به ایمیلتان می‌رسد.
+  - type: input
+    id: sid
+    attributes:
+      label: شمارهٔ دانشجویی
+      placeholder: "401234567"
+    validations:
+      required: true

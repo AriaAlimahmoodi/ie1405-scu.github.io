@@ -1,0 +1,23 @@
+# ثبت‌نام: هر issue با عنوان «ثبت‌نام» یک مخزن خصوصی ie1405-<شماره> در سازمان می‌سازد و نویسندهٔ issue را به آن دعوت می‌کند.
+# یک بار: secret به نام ORG_TOKEN در همین مخزن (توکن classic مدیر سازمان با دسترسی repo).
+name: ثبت‌نام
+on:
+  issues:
+    types: [opened]
+permissions:
+  issues: write
+concurrency:
+  group: register
+  cancel-in-progress: false
+jobs:
+  register:
+    if: github.event.issue.title == 'ثبت‌نام'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
+      - run: node .github/register.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG_TOKEN: ${{ secrets.ORG_TOKEN }}
