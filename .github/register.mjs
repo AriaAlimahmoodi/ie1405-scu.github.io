@@ -35,9 +35,18 @@ async function broken(why) {
   process.exit(1)
 }
 
+// فرم issue هر کادر را زیر یک «### عنوان» می‌گذارد
+const field = (label) => {
+  const part = String(issue.body || '').split(/^### /m).find(p => p.startsWith(label))
+  const v = part ? part.slice(label.length).trim() : ''
+  return v === '_No response_' ? '' : v
+}
 // شماره با رقم فارسی یا عربی هم پذیرفته می‌شود
-const body = String(issue.body || '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
-const id = body.match(/(?<!\d)(\d{7,12})(?!\d)/)?.[1]
+const digits = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+const id = digits(field('شمارهٔ دانشجویی') || String(issue.body || '')).match(/(?<!\d)(\d{7,12})(?!\d)/)?.[1]
+// نام فقط متن ساده و کوتاه؛ در توضیح مخزن می‌نشیند و حل‌تمرین از همان‌جا می‌خواندش
+const fullName = field('نام و نام خانوادگی').replace(/<[^>]*>/g, ' ').replace(/[\r\n<>`*_#\[\]()|]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60)
+const description = `تحویل تمرین‌های مهندسی اینترنت — ${fullName || 'بی‌نام'} (${id})`
 if (!id) { await reply(`شمارهٔ دانشجویی را در این فرم پیدا نکردم. لطفاً از همان پیوند ثبت‌نام یک فرم تازه باز کنید و فقط شماره را با رقم بنویسید.`, false); process.exit(0) }
 const token = process.env.ORG_TOKEN
 if (!token) await broken('ORG_TOKEN تعریف نشده است')
@@ -45,7 +54,7 @@ if (!token) await broken('ORG_TOKEN تعریف نشده است')
 const name = `${prefix}${id}`, repo = `${org}/${name}`
 let r = await call(token, 'GET', `/repos/${repo}`)
 if (r.status === 404) {
-  r = await call(token, 'POST', `/orgs/${org}/repos`, { name, private: true, auto_init: true, description: `تحویل تمرین‌های مهندسی اینترنت، ${id}`, has_wiki: false, has_projects: false })
+  r = await call(token, 'POST', `/orgs/${org}/repos`, { name, private: true, auto_init: true, description, has_wiki: false, has_projects: false })
   if (r.status !== 201) await broken(`ساختن ${repo}: ${r.status} ${JSON.stringify(r.data)}`)
 }
 else if (r.status === 200) {
@@ -60,6 +69,8 @@ else if (r.status === 200) {
 }
 else await broken(`خواندن ${repo}: ${r.status} ${JSON.stringify(r.data)}`)
 
+// ثبت‌نام دوباره با همان حساب: نام تازه جایگزین می‌شود
+await call(token, 'PATCH', `/repos/${repo}`, { description })
 r = await call(token, 'PUT', `/repos/${repo}/collaborators/${user}`, { permission: 'push' })
 if (r.status !== 201 && r.status !== 204) await broken(`دعوت ${user} به ${repo}: ${r.status} ${JSON.stringify(r.data)}`)
 
