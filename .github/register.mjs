@@ -22,19 +22,23 @@ async function call(token, method, path, body) {
   return { status: res.status, data }
 }
 async function reply(text, done) {
-  await call(process.env.GITHUB_TOKEN, 'POST', `/repos/${here}/issues/${issue.number}/comments`, { body: `@${user} ${text}` })
+  // نویسندهٔ issue خودکار از پاسخ‌ها خبردار می‌شود، پس mention لازم نیست (و در متن راست‌به‌چپ به هم می‌ریزد).
+  // GitHub متن را چپ‌چین نشان می‌دهد؛ ظرف dir="rtl" لازم است. بلوک کد بیرون از آن می‌ماند تا چپ‌به‌راست بماند.
+  const [rtl, code] = Array.isArray(text) ? text : [text, '']
+  const body = `<div dir="rtl">\n\n${rtl}\n\n</div>${code ? `\n\n${code}\n` : ''}`
+  await call(process.env.GITHUB_TOKEN, 'POST', `/repos/${here}/issues/${issue.number}/comments`, { body })
   await call(process.env.GITHUB_TOKEN, 'PATCH', `/repos/${here}/issues/${issue.number}`, { state: 'closed', state_reason: done ? 'completed' : 'not_planned' })
 }
 async function broken(why) {
   console.error(why)
-  await reply('ثبت‌نام الان انجام نشد. لطفاً به حل‌تمرین خبر بدهید؛ مشکل از طرف ماست، نه شما.', false)
+  await reply(`ثبت‌نام الان انجام نشد. مشکل از طرف ماست، نه شما. لطفاً به حل‌تمرین خبر بدهید.`, false)
   process.exit(1)
 }
 
 // شماره با رقم فارسی یا عربی هم پذیرفته می‌شود
 const body = String(issue.body || '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
 const id = body.match(/(?<!\d)(\d{7,12})(?!\d)/)?.[1]
-if (!id) { await reply('شمارهٔ دانشجویی را در این فرم پیدا نکردم. لطفاً دوباره از همان پیوند ثبت‌نام یک فرم تازه باز کنید و فقط شماره را بنویسید.', false); process.exit(0) }
+if (!id) { await reply(`شمارهٔ دانشجویی را در این فرم پیدا نکردم. لطفاً از همان پیوند ثبت‌نام یک فرم تازه باز کنید و فقط شماره را با رقم بنویسید.`, false); process.exit(0) }
 const token = process.env.ORG_TOKEN
 if (!token) await broken('ORG_TOKEN تعریف نشده است')
 
@@ -50,7 +54,7 @@ else if (r.status === 200) {
   const inv = await call(token, 'GET', `/repos/${repo}/invitations?per_page=100`)
   const people = [...(c.data || []).map(x => x.login), ...(inv.data || []).map(x => x.invitee?.login)].filter(Boolean).map(x => x.toLowerCase())
   if (people.length && !people.includes(user.toLowerCase())) {
-    await reply('این شمارهٔ دانشجویی قبلاً با حساب GitHub دیگری ثبت شده است. اگر شمارهٔ خودتان است، به حل‌تمرین خبر بدهید.', false)
+    await reply(`این شمارهٔ دانشجویی قبلاً با حساب GitHub دیگری ثبت شده است. اگر شمارهٔ خودتان است، به حل‌تمرین خبر بدهید.`, false)
     process.exit(0)
   }
 }
@@ -59,14 +63,13 @@ else await broken(`خواندن ${repo}: ${r.status} ${JSON.stringify(r.data)}`)
 r = await call(token, 'PUT', `/repos/${repo}/collaborators/${user}`, { permission: 'push' })
 if (r.status !== 201 && r.status !== 204) await broken(`دعوت ${user} به ${repo}: ${r.status} ${JSON.stringify(r.data)}`)
 
-await reply(`مخزن تحویل شما ساخته شد: https://github.com/${repo}
+await reply([`### ✓ مخزن شما آماده است
 
-1. دعوت را قبول کنید: از ایمیلی که GitHub فرستاده، یا از https://github.com/${repo}/invitations
-2. مخزن را روی کامپیوترتان clone کنید:
-   \`\`\`
-   git clone https://github.com/${repo}.git
-   \`\`\`
-3. ادامهٔ کار در [راهنمای تمرین‌ها](${guide}).
+مخزن خصوصی تحویل تمرین‌هایتان ساخته شد: **[${name}](https://github.com/${repo})**
 
-این مخزن خصوصی است و فقط شما، مدرس و حل‌تمرین آن را می‌بینید.`, true)
+1. **دعوت را قبول کنید.** ایمیلی را که GitHub فرستاده باز کنید، یا [این پیوند](https://github.com/${repo}/invitations) را.
+2. **مخزن را روی کامپیوترتان بیاورید** با دستور زیر.
+3. **ادامه در [راهنمای تمرین‌ها](${guide}).**
+
+<sub>این مخزن خصوصی است و فقط شما، مدرس و حل‌تمرین آن را می‌بینید.</sub>`, '```sh\ngit clone https://github.com/' + repo + '.git\n```'], true)
 console.log(`✓ ${repo} ← ${user}`)
