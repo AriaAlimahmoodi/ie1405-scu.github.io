@@ -1,0 +1,154 @@
+/* سایت درس: فهرست جلسه‌ها، صفحهٔ تمرین و قواعد درس. هم‌خانوادهٔ تم اسلایدها: هر صفحه در قاب مرورگر.
+   برای تغییر ظاهر فقط بخش «توکن‌ها» را عوض کنید؛ بقیهٔ فایل از همین متغیرها می‌خواند. */
+@font-face { font-family: Vazirmatn; src: url(vazirmatn.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url(jetbrains-mono.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+
+/* ── توکن‌ها ──
+   رنگ‌های حالت شب دو بار آمده‌اند و باید یکی بمانند: یک بار برای تنظیم دستگاه (prefers-color-scheme)
+   و یک بار برای انتخاب دستی با دکمهٔ نوار ابزار (data-theme روی html). */
+:root {
+  color-scheme: light;
+  --bg: #F4F6F8; --surface: #FFFFFF; --chrome: #DDE4EB; --ink: #16202C; --muted: #5A6776; --faint: #9AA8B6;
+  --rule: #D5DCE3; --rule-soft: #EDF1F5; --dash: #C3CDD7;
+  --accent: #0A6C86; --accent-strong: #08586E; --on-accent: #FFFFFF;
+  --ex: #137333; --ex-soft: #E6F4EA; --code: #EDF1F5;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px;
+  --r-control: 8px; --r-chip: 10px; --r-panel: 14px;
+  --t-small: 14px; --t-body: 17px; --t-title: 19px; --t-section: 24px; --t-display: clamp(40px, 8vw, 68px);
+  --chip: 44px;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0F1720; --surface: #16212C; --chrome: #080D13; --ink: #E6ECF2; --muted: #9AA8B6; --faint: #5A6776;
+    --rule: #2A3947; --rule-soft: #1F2B37; --dash: #3A4A5A;
+    --accent: #4FB6D0; --accent-strong: #7CCBE0; --on-accent: #0F1720;
+    --ex: #5CBF85; --ex-soft: #173024; --code: #1B2733;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0F1720; --surface: #16212C; --chrome: #080D13; --ink: #E6ECF2; --muted: #9AA8B6; --faint: #5A6776;
+  --rule: #2A3947; --rule-soft: #1F2B37; --dash: #3A4A5A;
+  --accent: #4FB6D0; --accent-strong: #7CCBE0; --on-accent: #0F1720;
+  --ex: #5CBF85; --ex-soft: #173024; --code: #1B2733;
+}
+
+/* ── پایه ── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: var(--t-body)/1.9 Vazirmatn, Tahoma, sans-serif; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-strong); }
+svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.wrap { max-width: 920px; margin-inline: auto; padding-inline: var(--s5); }
+.skip { position: absolute; z-index: 2; inset-inline-start: var(--s4); top: -60px; padding: var(--s2) var(--s4); background: var(--surface); border-radius: var(--r-control); }
+.skip:focus { top: var(--s2); }
+
+/* ── قاب مرورگر: تب، نوار نشانی، نوار پیوندها ── */
+.chrome { background: var(--chrome); }
+.tabs { display: flex; padding: var(--s2) var(--s4) 0; }
+.tab { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding-inline: 20px; background: var(--surface); border-radius: var(--r-chip) var(--r-chip) 0 0; color: var(--ink); font-size: var(--t-small); font-weight: 600; line-height: 1.6; text-decoration: none; }
+.tab:hover { color: var(--ink); }
+.fav { width: 12px; height: 12px; border-radius: 3px; background: var(--accent); }
+.bar { display: flex; align-items: center; gap: var(--s3); padding: 6px var(--s4); background: var(--surface); }
+.deco { display: flex; gap: var(--s3); color: var(--faint); }
+.omni { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: var(--s2); min-height: 36px; padding-inline: var(--s4); background: var(--bg); border-radius: 999px; color: var(--muted); font: 14px/1.6 var(--mono); }
+.omni svg { width: 15px; height: 15px; }
+.url { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.url b { color: var(--ink); font-weight: 400; }
+.theme { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer; }
+.theme:hover { background: var(--bg); color: var(--ink); }
+.theme[hidden] { display: none; }
+/* دکمه حالتی را نشان می‌دهد که با زدنش می‌آید: در روز ماه، در شب خورشید */
+.theme svg + svg { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme svg { display: none; }
+  :root:not([data-theme="light"]) .theme svg + svg { display: block; }
+}
+:root[data-theme="dark"] .theme svg { display: none; }
+:root[data-theme="dark"] .theme svg + svg { display: block; }
+.marks { display: flex; flex-wrap: wrap; gap: 0 var(--s2); padding-inline: var(--s2); background: var(--surface); border-top: 1px solid var(--rule-soft); border-bottom: 1px solid var(--rule); font-size: var(--t-small); }
+.marks a { display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; padding-inline: var(--s3); color: var(--ink); font-weight: 600; text-decoration: none; }
+.marks a:hover { color: var(--accent); }
+.marks svg { width: 16px; height: 16px; }
+
+/* ── «به نام خدا» به قالب کامنت HTML ──
+   لیگاچر قلم خاموش است؛ وگرنه JetBrains Mono علامت‌های کامنت را به پیکان تبدیل می‌کند. */
+.bism { margin: 40px 0 var(--s7); text-align: center; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.bism .c { font-family: var(--mono); font-size: var(--t-small); font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.bism bdi { padding-inline: var(--s3); }
+
+/* ── معرفی درس ── */
+.hero { padding-bottom: var(--s7); border-bottom: 1px solid var(--rule); }
+.hero h1 { font-size: var(--t-display); font-weight: 800; line-height: 1.3; margin: var(--s2) 0 var(--s4); }
+.hero p { margin: 0; color: var(--muted); font-size: 18px; }
+.hero b { color: var(--ink); font-weight: 700; }
+.hero .hint { margin-top: var(--s4); font-size: 16px; }
+
+/* ── بخش‌ها ── */
+.block { margin-top: 40px; }
+.head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0 var(--s4); }
+.head h2 { font-size: var(--t-section); font-weight: 800; line-height: 1.5; margin: 0; }
+.head p { margin: 0; color: var(--muted); font-size: var(--t-small); }
+.chapter h3 { font-size: 15px; font-weight: 700; color: var(--muted); margin: var(--s5) 0 var(--s2); }
+
+/* ── فهرست جلسه‌ها: شمارهٔ پر یعنی منتشرشده، خط‌چین یعنی به‌زودی ── */
+.sessions { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); }
+.session { display: grid; grid-template-columns: var(--chip) minmax(0, 1fr) auto; column-gap: 20px; align-items: center; padding-block: 20px; border-top: 1px solid var(--rule); }
+.n { align-self: start; width: var(--chip); height: var(--chip); border-radius: var(--r-chip); display: grid; place-items: center; font-weight: 800; font-size: 18px; line-height: 1; background: var(--accent); color: var(--on-accent); }
+.t h4 { font-size: var(--t-title); font-weight: 700; line-height: 1.6; margin: 0; }
+.t p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.8; }
+.t .addr { margin-top: var(--s1); text-align: right; font: 13px/1.6 var(--mono); overflow-wrap: anywhere; }
+.a { display: flex; gap: var(--s2); flex-wrap: wrap; justify-content: flex-end; }
+.off .n { background: none; color: var(--muted); border: 2px dashed var(--dash); }
+.off .t h4 { color: var(--muted); font-weight: 600; }
+.soon { font-size: var(--t-small); color: var(--muted); }
+.more { margin: var(--s4) 0 0; color: var(--muted); font-size: 15px; }
+
+/* ── دکمه‌ها ── */
+.btn { display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; padding-inline: var(--s4); border: 1px solid var(--rule); border-radius: var(--r-control); background: var(--surface); color: var(--ink); font-size: 15px; font-weight: 600; line-height: 1; text-decoration: none; white-space: nowrap; transition: background-color .15s, border-color .15s; }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--on-accent); }
+
+.empty { margin: var(--s4) 0 0; padding: var(--s5); border: 2px dashed var(--dash); border-radius: var(--r-panel); color: var(--muted); font-size: 16px; }
+
+/* ── صفحه‌های متنی: تمرین و قواعد درس ── */
+.doc { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-panel); padding: var(--s2) 28px var(--s5); margin-block: 28px; }
+.doc h1 { font-size: 28px; line-height: 1.5; }
+.doc h2 { font-size: 20px; margin-top: 30px; border-top: 1px solid var(--rule); padding-top: 18px; }
+.doc blockquote { margin: 0; padding: var(--s1) var(--s4); border-inline-start: 4px solid var(--ex); background: var(--ex-soft); border-radius: 6px; color: var(--ink); }
+.doc code { font-family: var(--mono); font-size: .86em; background: var(--code); padding: 1px 6px; border-radius: 4px; direction: ltr; unicode-bidi: isolate; }
+.doc pre { background: var(--code); padding: var(--s3) var(--s4); border-radius: var(--r-control); overflow-x: auto; text-align: left; line-height: 1.6; }
+.doc pre code { background: none; padding: 0; font-size: 14px; }
+.tbl { overflow-x: auto; }
+.doc table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.doc th, .doc td { border-bottom: 1px solid var(--rule); padding: var(--s2) 10px; text-align: start; vertical-align: top; }
+.doc th { color: var(--muted); font-weight: 700; }
+.files { border-top: 1px solid var(--rule); padding-top: 14px; }
+
+/* ── پانویس ── */
+footer { margin-top: 56px; border-top: 1px solid var(--rule); color: var(--muted); font-size: var(--t-small); }
+footer .wrap { padding-block: var(--s5) var(--s7); }
+
+/* ── گوشی ── */
+@media (max-width: 640px) {
+  :root { --t-body: 16px; --t-title: 18px; --chip: 36px; }
+  .wrap { padding-inline: var(--s4); }
+  .tabs { padding-inline: var(--s2); }
+  .bar { padding-inline: var(--s2); gap: var(--s2); }
+  .deco svg:not(:last-child) { display: none; }
+  .omni { padding-inline: var(--s3); font-size: 13px; }
+  .bism { margin-block: var(--s6); }
+  .hero p { font-size: 16px; }
+  .n { font-size: 16px; }
+  .session { grid-template-columns: var(--chip) minmax(0, 1fr); column-gap: var(--s3); padding-block: var(--s4); }
+  .a { grid-column: 2; justify-content: flex-start; margin-top: var(--s3); }
+  .off .a { margin-top: var(--s1); }
+  .btn { padding-inline: var(--s3); font-size: var(--t-small); }
+  .doc { padding: var(--s1) var(--s4) 18px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

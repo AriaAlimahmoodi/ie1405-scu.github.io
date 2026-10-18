@@ -1,0 +1,1 @@
+import{f as e,m as t,p as n}from"../monaco/bundled-types-C9XZc1p5.js";function r(){return{isColorSchemaConfigured:e,isDark:n,toggleDark:t}}export{r as t};

@@ -1,0 +1,38 @@
+{
+  "iphone-2007.jpg": {
+    "file": "IPhone First Generation.jpg",
+    "artist": "Carl Berkeley from Riverside California",
+    "license": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:IPhone_First_Generation.jpg"
+  },
+  "nsa-muscular.jpg": {
+    "file": "NSA Muscular Google Cloud.jpg",
+    "artist": "U.S. National Security Agency",
+    "license": "Public domain",
+    "page": "https://commons.wikimedia.org/wiki/File:NSA_Muscular_Google_Cloud.jpg"
+  },
+  "arpanet-map-1977.png": {
+    "file": "Arpanet logical map, march 1977.png",
+    "artist": "ARPANET",
+    "license": "Public domain",
+    "page": "https://commons.wikimedia.org/wiki/File:Arpanet_logical_map,_march_1977.png"
+  },
+  "first-web-server.jpg": {
+    "file": "First Web Server.jpg",
+    "artist": "User:Coolcaesar at en.wikipedia",
+    "license": "CC BY-SA 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:First_Web_Server.jpg"
+  },
+  "mosaic.png": {
+    "file": "NCSA Mosaic Browser Screenshot.png",
+    "artist": "Charles Severance",
+    "license": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File:NCSA_Mosaic_Browser_Screenshot.png"
+  },
+  "browser-wars.png": {
+    "file": "Browser Wars (en).svg",
+    "artist": "Wereon",
+    "license": "CC BY-SA 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Browser_Wars_(en).svg"
+  }
+}
