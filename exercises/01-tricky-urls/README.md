@@ -51,7 +51,7 @@ export function guard(input) {
 2. مخزن درس را کنار مخزن خودتان بگیرید:
 
    ```sh
-   git clone https://github.com/ie1405-scu/ie-course-scu.git
+   git clone https://github.com/ie1405-scu/ie1405-scu.github.io.git ie-course-scu
    ```
 
 3. پوشهٔ `starter` این تمرین را با اسم `ex01` در مخزن خودتان کپی کنید و واردش شوید. در دو دستور زیر، اسم مخزن خودتان را جای اسم نمونه بنویسید:
