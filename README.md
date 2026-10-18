@@ -8,7 +8,7 @@
 **دانشگاه:** دانشگاه شهید چمران اهواز، دانشکدهٔ مهندسی<br>
 **نیم‌سال:** پاییز ۱۴۰۵
 
-سایت درس: https://basirdez.github.io/ie-course-scu/<br>
+سایت درس: https://ie1405-scu.github.io/ie-course-scu/<br>
 کانال درس در بله: https://ble.ir/ie_scu
 
 ## جلسه‌ها
@@ -17,13 +17,13 @@
 
 | جلسه | عنوان | نسخهٔ HTML | نسخهٔ PDF |
 | :-: | --- | :-: | :-: |
-| ۰ | اینترنت چطور به اینجا رسید؟ | [مشاهده](https://basirdez.github.io/ie-course-scu/00-how-we-got-here/) | [دریافت](https://basirdez.github.io/ie-course-scu/00-how-we-got-here/00-how-we-got-here.pdf) |
-| ۱ | از URL تا سرور | [مشاهده](https://basirdez.github.io/ie-course-scu/01-url-to-server/) | [دریافت](https://basirdez.github.io/ie-course-scu/01-url-to-server/01-url-to-server.pdf) |
+| ۰ | اینترنت چطور به اینجا رسید؟ | [مشاهده](https://ie1405-scu.github.io/ie-course-scu/00-how-we-got-here/) | [دریافت](https://ie1405-scu.github.io/ie-course-scu/00-how-we-got-here/00-how-we-got-here.pdf) |
+| ۱ | از URL تا سرور | [مشاهده](https://ie1405-scu.github.io/ie-course-scu/01-url-to-server/) | [دریافت](https://ie1405-scu.github.io/ie-course-scu/01-url-to-server/01-url-to-server.pdf) |
 
 ## تمرین‌ها
 
-| جلسه | تمرین |
-| :-: | --- |
-| ۱ | [از URL تا سرور](exercises/01-tricky-urls/) |
+| شماره | تمرین | مهلت تحویل |
+| :-: | --- | --- |
+| ۱ | [کدام URL شما را فریب می‌دهد؟](exercises/01-tricky-urls/) | چهارشنبه ۲۹ مهر ۱۴۰۵، ساعت ۲۳:۵۹ |
 
 </div>
