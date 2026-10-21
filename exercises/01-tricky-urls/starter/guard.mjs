@@ -1,6 +1,27 @@
-// این بررسی همکارتان است. درستش کنید.
-// قبول: { ok: true, url }   رد: { ok: false }
 export function guard(input) {
-  if (!input.includes('scu.test')) return { ok: false }
-  return { ok: true, url: input }
+    let url;
+
+    try {
+        url = new URL(input);
+    } catch {
+        return { ok: false };
+    }
+
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+        return { ok: false };
+    }
+
+    if (url.origin !== 'http://scu.test' &&
+        url.origin !== 'https://scu.test') {
+        return { ok: false };
+    }
+
+    if (url.username !== '' || url.password !== '') {
+        return { ok: false };
+    }
+
+    return {
+        ok: true,
+        url: url.href
+    };
 }
